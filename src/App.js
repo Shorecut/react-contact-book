@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import ContactForm from "./component/ContactForm";
+import ContactList from "./component/ContactList";
 
 function App() {
+  const [contacts, setContact] = useState([]);
+
+  function addContact(newContact) {
+    setContact([...contacts, newContact]);
+  }
+
+  function deleteContact(id) {
+    const newArr = contacts.filter((item) => item.id !== id);
+    setContact(newArr);
+  }
+
+  function changeStatus(id) {
+    const newArr = contacts.map((item) => {
+      if (item.id === id) {
+        item.premium = !item.premium;
+      }
+      return item;
+    });
+    setContact(newArr);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Contact Book</h1>
+      <ContactForm addContact={addContact} />
+      <ContactList
+        changeStatus={changeStatus}
+        deleteContact={deleteContact}
+        contacts={contacts}
+      />
     </div>
   );
 }
